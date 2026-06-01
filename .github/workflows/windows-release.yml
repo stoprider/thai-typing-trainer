@@ -53,4 +53,4 @@ jobs:
             Automated Windows desktop release for TypeFlow.
           releaseDraft: true
           prerelease: false
-          includeUpdaterJson: true
+          uploadUpdaterJson: true
