@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { DesktopControlPanel } from './components/DesktopControlPanel'
 import { DashboardPanel } from './components/DashboardPanel'
 import { FingerGuide } from './components/FingerGuide'
 import { KeyboardVisualizer } from './components/KeyboardVisualizer'
@@ -6,6 +7,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { LessonList } from './components/LessonList'
 import { SectionCard } from './components/SectionCard'
 import { SoundControls } from './components/SoundControls'
+import { TypeFlowMark } from './components/TypeFlowMark'
 import { TypingPanel } from './components/TypingPanel'
 import { getLessonsByLanguage, buildPersonalizedLesson } from './features/lesson/lessonData'
 import { getDashboardStats, getWeakKeysByLanguage } from './features/statistics/statisticsSelectors'
@@ -15,11 +17,12 @@ import {
   createTypingSession,
   processKeyStroke,
 } from './features/typing/typingEngine'
+import { useDesktopRuntime } from './hooks/useDesktopRuntime'
 import { usePersistentState } from './hooks/usePersistentState'
 import { useSoundEffects } from './hooks/useSoundEffects'
 import { useTrainingHistory } from './hooks/useTrainingHistory'
 import { appServices } from './services/appContainer'
-import type { Language, Lesson, SoundSettings, TypingSession } from './types'
+import type { DesktopPreferences, Language, Lesson, SoundSettings, TypingSession } from './types'
 
 function pickDefaultLesson(language: Language): string {
   const firstLesson = getLessonsByLanguage(language)[0]
@@ -40,12 +43,25 @@ function App() {
     'typeflow.sound-settings',
     { enabled: true, volume: 0.35 },
   )
+  const [desktopPreferences, setDesktopPreferences] =
+    usePersistentState<DesktopPreferences>('typeflow.desktop-preferences', {
+      compactMode: false,
+      alwaysOnTop: false,
+      fullscreen: false,
+    })
   const [session, setSession] = useState<TypingSession | null>(null)
   const completionRef = useRef<string | null>(null)
   const { results, isReady, addResult, clearResults } = useTrainingHistory(
     appServices.trainingResults,
   )
   const { playSound, unlockAudio } = useSoundEffects(soundSettings)
+  const {
+    runtimeInfo,
+    centerWindow,
+    applyAlwaysOnTop,
+    applyFullscreen,
+    toggleMaximize,
+  } = useDesktopRuntime(desktopPreferences)
 
   const weakKeys = useMemo(
     () => getWeakKeysByLanguage(results, language),
@@ -94,21 +110,39 @@ function App() {
     void addResult(buildTrainingResult(selectedLesson, activeSession))
   }, [activeSession, addResult, playSound, selectedLesson])
 
+  useEffect(() => {
+    void applyAlwaysOnTop(desktopPreferences.alwaysOnTop)
+  }, [applyAlwaysOnTop, desktopPreferences.alwaysOnTop])
+
+  useEffect(() => {
+    void applyFullscreen(desktopPreferences.fullscreen)
+  }, [applyFullscreen, desktopPreferences.fullscreen])
+
   return (
     <main className="min-h-screen bg-mist bg-[size:32px_32px] bg-grid text-ink">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+      <div
+        className={`mx-auto flex w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8 ${
+          desktopPreferences.compactMode ? 'gap-5' : 'gap-8'
+        }`}
+      >
         <section className="overflow-hidden rounded-[32px] bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.9),_rgba(255,236,205,0.78)_45%,_rgba(207,250,254,0.84)_100%)] p-8 shadow-soft md:p-12">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <div>
-              <p className="font-mono text-sm uppercase tracking-[0.32em] text-ember">
-                TypeFlow
-              </p>
+              <TypeFlowMark />
               <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight text-ink md:text-6xl">
                 Touch typing for Thai and English, with live feedback and adaptive practice.
               </h1>
               <p className="mt-4 max-w-2xl text-base text-slate-700 md:text-lg">
                 ฝึกวางนิ้วให้ถูก ตรวจจับการพิมพ์ผิดแบบ real-time และเก็บสถิติเพื่อสร้างบทเรียนเฉพาะบุคคลในอนาคต
               </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+                  {runtimeInfo.isDesktop ? 'Desktop Edition' : 'Web Edition'}
+                </span>
+                <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600 ring-1 ring-white/80">
+                  v{runtimeInfo.appVersion}
+                </span>
+              </div>
             </div>
             <div className="flex flex-col gap-4">
               <div className="rounded-[28px] border border-white/60 bg-white/70 p-6 backdrop-blur">
@@ -215,6 +249,51 @@ function App() {
             <p className="text-sm text-slate-500">Loading saved history...</p>
           )}
         </SectionCard>
+
+        <div className="grid gap-8 xl:grid-cols-[1fr_1fr]">
+          <SectionCard
+            title="Desktop Controls"
+            subtitle="ควบคุมพฤติกรรมหน้าต่างและ workspace สำหรับเวอร์ชัน Windows desktop"
+          >
+            <DesktopControlPanel
+              info={runtimeInfo}
+              preferences={desktopPreferences}
+              onChange={setDesktopPreferences}
+              onCenterWindow={() => void centerWindow()}
+              onToggleMaximize={() => void toggleMaximize()}
+            />
+          </SectionCard>
+
+          <SectionCard
+            title="About TypeFlow"
+            subtitle="ข้อมูลเวอร์ชันและแนวคิดของแอปสำหรับการแจกจ่ายเป็นเดสก์ท็อป"
+          >
+            <div className="space-y-4 text-sm text-slate-600">
+              <TypeFlowMark compact />
+              <p>
+                TypeFlow ถูกออกแบบให้เป็น typing trainer สำหรับภาษาไทยและภาษาอังกฤษ โดยให้
+                feedback แบบ real-time ทั้งภาพ เสียง และสถิติย้อนหลัง เพื่อรองรับการฝึกแบบต่อเนื่องในเครื่องส่วนตัวหรือในห้องเรียน
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Package</p>
+                  <p className="mt-2 font-mono text-base font-semibold text-ink">
+                    {runtimeInfo.isDesktop ? 'Tauri / Windows' : 'Browser'}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Version</p>
+                  <p className="mt-2 font-mono text-base font-semibold text-ink">
+                    App {runtimeInfo.appVersion} / Tauri {runtimeInfo.tauriVersion}
+                  </p>
+                </div>
+              </div>
+              <p>
+                เวอร์ชัน desktop นี้พร้อมสำหรับการ build เป็น `.exe` และ `.msi` แล้ว และสามารถขยายต่อไปสู่ auto-update, cloud sync, และ deployment ผ่าน GitHub Actions ได้
+              </p>
+            </div>
+          </SectionCard>
+        </div>
       </div>
     </main>
   )

@@ -14,6 +14,7 @@ TypeFlow คือเว็บแอปฝึกพิมพ์สัมผั�
 - บันทึกข้อมูลด้วย `localStorage`
 - ระบบเสียงตอบกลับ เปิด/ปิดได้ และปรับความดังได้
 - โครงสร้างพร้อมต่อ backend ในอนาคต
+- Desktop controls สำหรับ Tauri เช่น always-on-top / fullscreen / center window
 
 ## เทคโนโลยี
 
@@ -100,6 +101,21 @@ MVP ที่พร้อมใช้งานแล้วในเวอร์�
 - `src-tauri/target/release/bundle/msi/TypeFlow_0.1.0_x64_en-US.msi`
 
 ถ้าต้องการติดตั้งให้ผู้ใช้ทั่วไป แนะนำแจกไฟล์ `NSIS .exe` เป็นหลัก และเก็บ `MSI` ไว้สำหรับองค์กรหรือ deployment tools
+
+## GitHub Actions
+
+โปรเจ็กต์มี workflow สำหรับ build Windows อัตโนมัติแล้วที่:
+
+- [.github/workflows/windows-tauri.yml](/e:/thai-typing-trainer/.github/workflows/windows-tauri.yml)
+
+workflow นี้จะ:
+
+- ติดตั้ง Node.js และ Rust
+- รัน `npm ci`
+- รัน `npm run lint`
+- รัน `npm run build`
+- build Tauri สำหรับ Windows
+- อัปโหลด bundle เป็น workflow artifacts
 
 ## แผนพัฒนาต่อ
 

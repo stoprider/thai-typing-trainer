@@ -318,6 +318,21 @@ src-tauri/
 - รัน frontend dev server ผ่าน `beforeDevCommand`
 - ใช้ `../dist` เป็น frontend asset สำหรับ production bundle
 
+### 10.8 Desktop About / Settings Layer
+
+ไฟล์:
+
+- [DesktopControlPanel.tsx](/e:/thai-typing-trainer/src/components/DesktopControlPanel.tsx)
+- [TypeFlowMark.tsx](/e:/thai-typing-trainer/src/components/TypeFlowMark.tsx)
+- [useDesktopRuntime.ts](/e:/thai-typing-trainer/src/hooks/useDesktopRuntime.ts)
+
+หน้าที่
+
+- แสดงข้อมูลเวอร์ชันของแอปและ Tauri runtime
+- ตรวจจับว่าแอปกำลังรันใน browser หรือ desktop
+- ควบคุม window state เช่น always-on-top, fullscreen, center window
+- เก็บ desktop preferences ไว้ใน local storage
+
 ## 11. Local Storage Schema
 
 ระบบใช้ key หลักดังนี้
@@ -455,6 +470,7 @@ npm run tauri:build
 - เพิ่ม sentence pack
 - เพิ่ม reset progress เฉพาะภาษา
 - เพิ่ม visual summary หลังจบบทเรียน
+- เพิ่ม auto-update channel สำหรับ desktop
 
 ### ระยะกลาง
 
@@ -462,6 +478,7 @@ npm run tauri:build
 - เพิ่ม login
 - sync ข้อมูลขึ้น cloud
 - เพิ่มโปรไฟล์ผู้ใช้
+- เพิ่ม signed Windows release ผ่าน CI
 
 ### ระยะยาว
 
@@ -472,6 +489,21 @@ npm run tauri:build
 - mobile app
 - desktop app
 
-## 18. สรุป
+## 18. CI/CD สำหรับ Windows
+
+ไฟล์ workflow:
+
+- [.github/workflows/windows-tauri.yml](/e:/thai-typing-trainer/.github/workflows/windows-tauri.yml)
+
+บทบาทของ workflow
+
+- build แอปบน `windows-latest`
+- ติดตั้ง Rust stable
+- cache Rust dependencies
+- รัน lint และ web build
+- เรียก `tauri-apps/tauri-action` เพื่อสร้าง Windows bundles
+- อัปโหลด artifacts ของ workflow เพื่อนำไปดาวน์โหลดจาก GitHub Actions
+
+## 19. สรุป
 
 TypeFlow เวอร์ชันปัจจุบันเป็น MVP ที่พร้อมใช้งานจริงสำหรับฝึกพิมพ์ผ่านเว็บ โดยมีทั้ง typing engine, keyboard visualization, dashboard, persistence, และ sound feedback พร้อมโครงสร้างที่สามารถขยายต่อได้อย่างเป็นระบบ

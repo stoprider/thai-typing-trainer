@@ -85,3 +85,16 @@ export interface SoundSettings {
   enabled: boolean
   volume: number
 }
+
+export interface DesktopRuntimeInfo {
+  isDesktop: boolean
+  appVersion: string
+  tauriVersion: string
+  platformLabel: string
+}
+
+export interface DesktopPreferences {
+  compactMode: boolean
+  alwaysOnTop: boolean
+  fullscreen: boolean
+}
