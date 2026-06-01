@@ -13,7 +13,7 @@ interface TypingPanelProps {
 }
 
 function renderCharacter(character: string): string {
-  return character === ' ' ? '·' : character
+  return character === ' ' ? '\u00A0' : character
 }
 
 export function TypingPanel({
@@ -61,7 +61,7 @@ export function TypingPanel({
         <StatPill label="Errors" value={`${session.errorCount}`} />
       </div>
 
-      <div className="rounded-[24px] bg-slate-950 px-5 py-6 text-left text-lg leading-9 text-white md:px-7">
+      <div className="whitespace-pre-wrap rounded-[24px] bg-slate-950 px-5 py-6 text-left text-lg leading-9 text-white md:px-7">
         {renderedContent}
       </div>
 

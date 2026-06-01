@@ -6,9 +6,9 @@ export const lessons: Lesson[] = [
     language: 'th',
     level: 'home-row',
     title: 'Thai Home Row',
-    description: 'ฝึกแถวกลางเพื่อวางนิ้วให้มั่นคงและแม่นยำ',
+    description: 'ฝึกแถวกลางด้วยชุดคำสั้นที่ช่วยคงจังหวะและวางนิ้วให้แม่นยำ',
     focusKeys: ['ฟ', 'ห', 'ก', 'ด', 'เ', '้', '่', 'า', 'ส'],
-    content: 'ฟหกด เ้่าส ฟกดา หฟกด เ่าสด',
+    content: 'ฟหกด เก่า เก้า สาด ฟาด หาด ฟาก ด่า',
     targetWpm: 18,
   },
   {
@@ -16,9 +16,9 @@ export const lessons: Lesson[] = [
     language: 'th',
     level: 'top-row',
     title: 'Thai Top Row',
-    description: 'ไล่จังหวะแถวบนและเชื่อมกับแถวกลาง',
-    focusKeys: ['ๆ', 'ไ', 'ำ', 'พ', 'ะ', 'ั', 'ี', 'ร', 'น', 'ย'],
-    content: 'พะัี รนย ไำพะ รนยี พะรน',
+    description: 'ไล่นิ้วแถวบนและฝึกสลับกลับมายังตำแหน่งหลักอย่างนุ่มนวล',
+    focusKeys: ['ไ', 'ำ', 'พ', 'ะ', 'ั', 'ี', 'ร', 'น', 'ย'],
+    content: 'นี พี ระยะ พะนะ นารี พิมพ์ ยืน',
     targetWpm: 20,
   },
   {
@@ -26,7 +26,7 @@ export const lessons: Lesson[] = [
     language: 'th',
     level: 'words',
     title: 'Thai Words',
-    description: 'ประกอบเป็นคำสั้นเพื่อสร้างความต่อเนื่อง',
+    description: 'ฝึกคำไทยที่ใช้จริงเพื่อเพิ่มความต่อเนื่องและความมั่นใจ',
     focusKeys: ['ก', 'า', 'ด', 'เ', 'น', 'ร'],
     content: 'งาน เดิน การ งานดี การเดิน อ่านงาน',
     targetWpm: 24,
@@ -87,7 +87,7 @@ export function buildPersonalizedLesson(
     title: language === 'th' ? 'บทเรียนเฉพาะบุคคล' : 'Personalized Practice',
     description:
       language === 'th'
-        ? 'สร้างจากตัวอักษรที่พลาดบ่อยที่สุดของคุณ'
+        ? 'สร้างจากตัวอักษรที่คุณพลาดบ่อยที่สุด เพื่อเร่งแก้จุดอ่อนเฉพาะตัว'
         : 'Built from the keys you miss most often.',
     focusKeys: weakKeys.slice(0, 6),
     content,
