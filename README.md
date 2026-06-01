@@ -97,8 +97,8 @@ MVP ที่พร้อมใช้งานแล้วในเวอร์�
 
 หลังจาก build ด้วย `npm run tauri:build` จะได้ไฟล์หลักอยู่ที่:
 
-- `src-tauri/target/release/bundle/nsis/TypeFlow_0.1.0_x64-setup.exe`
-- `src-tauri/target/release/bundle/msi/TypeFlow_0.1.0_x64_en-US.msi`
+- `src-tauri/target/release/bundle/nsis/TypeFlow_0.1.1_x64-setup.exe`
+- `src-tauri/target/release/bundle/msi/TypeFlow_0.1.1_x64_en-US.msi`
 
 ถ้าต้องการติดตั้งให้ผู้ใช้ทั่วไป แนะนำแจกไฟล์ `NSIS .exe` เป็นหลัก และเก็บ `MSI` ไว้สำหรับองค์กรหรือ deployment tools
 

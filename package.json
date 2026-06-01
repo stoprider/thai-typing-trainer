@@ -1,7 +1,7 @@
 {
   "name": "typeflow",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Thai and English touch typing trainer built with React, Vite, and Tauri",
   "author": "stoprider",
   "homepage": "https://github.com/stoprider/thai-typing-trainer",
