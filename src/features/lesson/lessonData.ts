@@ -1,0 +1,96 @@
+import type { Language, Lesson } from '../../types'
+
+export const lessons: Lesson[] = [
+  {
+    id: 'th-home-row',
+    language: 'th',
+    level: 'home-row',
+    title: 'Thai Home Row',
+    description: 'ฝึกแถวกลางเพื่อวางนิ้วให้มั่นคงและแม่นยำ',
+    focusKeys: ['ฟ', 'ห', 'ก', 'ด', 'เ', '้', '่', 'า', 'ส'],
+    content: 'ฟหกด เ้่าส ฟกดา หฟกด เ่าสด',
+    targetWpm: 18,
+  },
+  {
+    id: 'th-top-row',
+    language: 'th',
+    level: 'top-row',
+    title: 'Thai Top Row',
+    description: 'ไล่จังหวะแถวบนและเชื่อมกับแถวกลาง',
+    focusKeys: ['ๆ', 'ไ', 'ำ', 'พ', 'ะ', 'ั', 'ี', 'ร', 'น', 'ย'],
+    content: 'พะัี รนย ไำพะ รนยี พะรน',
+    targetWpm: 20,
+  },
+  {
+    id: 'th-words',
+    language: 'th',
+    level: 'words',
+    title: 'Thai Words',
+    description: 'ประกอบเป็นคำสั้นเพื่อสร้างความต่อเนื่อง',
+    focusKeys: ['ก', 'า', 'ด', 'เ', 'น', 'ร'],
+    content: 'งาน เดิน การ งานดี การเดิน อ่านงาน',
+    targetWpm: 24,
+  },
+  {
+    id: 'en-home-row',
+    language: 'en',
+    level: 'home-row',
+    title: 'English Home Row',
+    description: 'Anchor your fingers on the home row and keep a steady rhythm.',
+    focusKeys: ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'],
+    content: 'asdf jkl; sad lad flask ask dads',
+    targetWpm: 25,
+  },
+  {
+    id: 'en-bottom-row',
+    language: 'en',
+    level: 'bottom-row',
+    title: 'English Bottom Row',
+    description: 'Stretch downward without losing your home-row posture.',
+    focusKeys: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+    content: 'zxcv bnm zinc cabin vivid maze',
+    targetWpm: 28,
+  },
+  {
+    id: 'en-sentences',
+    language: 'en',
+    level: 'sentences',
+    title: 'English Sentences',
+    description: 'Practice full-flow typing with realistic sentence rhythm.',
+    focusKeys: ['t', 'h', 'e', 'o', 'i', 'n'],
+    content: 'the team can type with focus and clean motion',
+    targetWpm: 32,
+  },
+]
+
+export function getLessonsByLanguage(language: Language): Lesson[] {
+  return lessons.filter((lesson) => lesson.language === language)
+}
+
+export function buildPersonalizedLesson(
+  language: Language,
+  weakKeys: string[],
+): Lesson | null {
+  if (weakKeys.length === 0) {
+    return null
+  }
+
+  const content = weakKeys
+    .slice(0, 6)
+    .map((key, index) => `${key}${key} ${key}${index % 2 === 0 ? ' ' : key}`)
+    .join(' ')
+
+  return {
+    id: `${language}-personalized`,
+    language,
+    level: 'personalized',
+    title: language === 'th' ? 'บทเรียนเฉพาะบุคคล' : 'Personalized Practice',
+    description:
+      language === 'th'
+        ? 'สร้างจากตัวอักษรที่พลาดบ่อยที่สุดของคุณ'
+        : 'Built from the keys you miss most often.',
+    focusKeys: weakKeys.slice(0, 6),
+    content,
+    targetWpm: language === 'th' ? 22 : 30,
+  }
+}
