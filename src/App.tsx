@@ -17,6 +17,7 @@ import {
   createTypingSession,
   processKeyStroke,
 } from './features/typing/typingEngine'
+import { useAppUpdater } from './hooks/useAppUpdater'
 import { useDesktopRuntime } from './hooks/useDesktopRuntime'
 import { usePersistentState } from './hooks/usePersistentState'
 import { useSoundEffects } from './hooks/useSoundEffects'
@@ -62,6 +63,7 @@ function App() {
     applyFullscreen,
     toggleMaximize,
   } = useDesktopRuntime(desktopPreferences)
+  const { updaterState, runUpdater } = useAppUpdater(runtimeInfo.isDesktop)
 
   const weakKeys = useMemo(
     () => getWeakKeysByLanguage(results, language),
@@ -258,9 +260,11 @@ function App() {
             <DesktopControlPanel
               info={runtimeInfo}
               preferences={desktopPreferences}
+              updaterState={updaterState}
               onChange={setDesktopPreferences}
               onCenterWindow={() => void centerWindow()}
               onToggleMaximize={() => void toggleMaximize()}
+              onCheckForUpdates={() => void runUpdater()}
             />
           </SectionCard>
 

@@ -98,3 +98,10 @@ export interface DesktopPreferences {
   alwaysOnTop: boolean
   fullscreen: boolean
 }
+
+export interface UpdaterState {
+  status: 'idle' | 'checking' | 'available' | 'downloading' | 'updated' | 'latest' | 'error'
+  message: string
+  progress: number
+  availableVersion: string | null
+}

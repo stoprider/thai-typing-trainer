@@ -26,6 +26,17 @@
       "csp": null
     }
   },
+  "plugins": {
+    "updater": {
+      "windows": {
+        "installMode": "passive"
+      },
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDIxODA1ODhEMzYzNjMwOTcKUldTWE1EWTJqVmlBSWVLNXp0N1ljKyszMnhRV0pZRDZEQ09RclFxaFBPcHp0RmZvN2FQMjRLMUkK",
+      "endpoints": [
+        "https://github.com/stoprider/thai-typing-trainer/releases/latest/download/latest.json"
+      ]
+    }
+  },
   "bundle": {
     "active": true,
     "targets": ["nsis", "msi"],

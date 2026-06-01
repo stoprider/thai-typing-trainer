@@ -333,6 +333,20 @@ src-tauri/
 - ควบคุม window state เช่น always-on-top, fullscreen, center window
 - เก็บ desktop preferences ไว้ใน local storage
 
+### 10.9 Auto Update Layer
+
+ไฟล์:
+
+- [useAppUpdater.ts](/e:/thai-typing-trainer/src/hooks/useAppUpdater.ts)
+- [tauri.conf.json](/e:/thai-typing-trainer/src-tauri/tauri.conf.json)
+- [tauri.release.conf.json](/e:/thai-typing-trainer/src-tauri/tauri.release.conf.json)
+
+หน้าที่
+
+- ตรวจสอบอัปเดตจาก GitHub Releases
+- ดาวน์โหลดและติดตั้งอัปเดตในเวอร์ชัน desktop
+- แยก release-only config เพื่อสร้าง updater artifacts โดยไม่ทำให้ local build ปกติบังคับใช้ signing key
+
 ## 11. Local Storage Schema
 
 ระบบใช้ key หลักดังนี้
@@ -503,6 +517,17 @@ npm run tauri:build
 - รัน lint และ web build
 - เรียก `tauri-apps/tauri-action` เพื่อสร้าง Windows bundles
 - อัปโหลด artifacts ของ workflow เพื่อนำไปดาวน์โหลดจาก GitHub Actions
+
+เพิ่มเติม:
+
+- มี workflow แยกสำหรับ GitHub Release และ auto-update metadata
+- workflow release ใช้ GitHub Secrets สำหรับ signing key ของ updater
+- release ถูกสร้างเป็น draft เพื่อให้ตรวจสอบก่อน publish จริง
+
+Secrets ที่จำเป็น:
+
+- `TAURI_SIGNING_PRIVATE_KEY`
+- `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`
 
 ## 19. สรุป
 

@@ -1,11 +1,13 @@
-import type { DesktopPreferences, DesktopRuntimeInfo } from '../types'
+import type { DesktopPreferences, DesktopRuntimeInfo, UpdaterState } from '../types'
 
 interface DesktopControlPanelProps {
   info: DesktopRuntimeInfo
   preferences: DesktopPreferences
+  updaterState: UpdaterState
   onChange: (nextValue: DesktopPreferences) => void
   onCenterWindow: () => void
   onToggleMaximize: () => void
+  onCheckForUpdates: () => void
 }
 
 function ToggleRow({
@@ -45,9 +47,11 @@ function ToggleRow({
 export function DesktopControlPanel({
   info,
   preferences,
+  updaterState,
   onChange,
   onCenterWindow,
   onToggleMaximize,
+  onCheckForUpdates,
 }: DesktopControlPanelProps) {
   return (
     <div className="space-y-5">
@@ -121,6 +125,28 @@ export function DesktopControlPanel({
         >
           Toggle Maximize
         </button>
+      </div>
+
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold text-ink">Auto Update</p>
+            <p className="mt-1 text-sm text-slate-500">{updaterState.message}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onCheckForUpdates}
+            className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          >
+            Check for Updates
+          </button>
+        </div>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
+          <div
+            className="h-full rounded-full bg-cyan-600 transition-all"
+            style={{ width: `${updaterState.progress}%` }}
+          />
+        </div>
       </div>
     </div>
   )

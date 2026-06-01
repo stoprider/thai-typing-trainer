@@ -107,6 +107,7 @@ MVP ที่พร้อมใช้งานแล้วในเวอร์�
 โปรเจ็กต์มี workflow สำหรับ build Windows อัตโนมัติแล้วที่:
 
 - [.github/workflows/windows-tauri.yml](/e:/thai-typing-trainer/.github/workflows/windows-tauri.yml)
+- [.github/workflows/windows-release.yml](/e:/thai-typing-trainer/.github/workflows/windows-release.yml)
 
 workflow นี้จะ:
 
@@ -116,6 +117,18 @@ workflow นี้จะ:
 - รัน `npm run build`
 - build Tauri สำหรับ Windows
 - อัปโหลด bundle เป็น workflow artifacts
+
+ส่วน release workflow จะ:
+
+- ทำงานเมื่อ push tag รูปแบบ `v*`
+- สร้าง GitHub Release แบบ draft
+- แนบไฟล์ `.exe`, `.msi` และ updater metadata
+- ใช้ signing key จาก GitHub Secrets เพื่อรองรับ auto-update
+
+Secrets ที่ต้องตั้งค่าใน GitHub repository:
+
+- `TAURI_SIGNING_PRIVATE_KEY`
+- `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`
 
 ## แผนพัฒนาต่อ
 
