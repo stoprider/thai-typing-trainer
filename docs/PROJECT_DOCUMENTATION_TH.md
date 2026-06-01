@@ -4,6 +4,8 @@
 
 TypeFlow เป็นระบบฝึกพิมพ์สัมผัสผ่านเว็บเบราว์เซอร์สำหรับภาษาไทยและภาษาอังกฤษ โดยมีเป้าหมายเพื่อช่วยผู้ใช้พัฒนาความเร็ว ความแม่นยำ และทักษะการวางนิ้วอย่างถูกต้อง พร้อมวางพื้นฐานสำหรับระบบบทเรียนเฉพาะบุคคลในอนาคต
 
+เวอร์ชันปัจจุบันรองรับทั้งการทำงานแบบเว็บแอป และมีโครงสร้างสำหรับแพ็กเป็นโปรแกรม Windows ผ่าน Tauri แล้ว
+
 ## 2. เป้าหมายทางธุรกิจ
 
 - ช่วยผู้ใช้พิมพ์ได้เร็วขึ้น
@@ -58,6 +60,12 @@ TypeFlow เป็นระบบฝึกพิมพ์สัมผัสผ�
 
 - Web Audio API สำหรับเสียง
 - LocalStorage สำหรับ persistence
+
+### Desktop Runtime
+
+- Tauri 2
+- Rust backend runtime
+- Windows bundle targets: `NSIS`, `MSI`
 
 ### Future Backend
 
@@ -152,6 +160,11 @@ src/
   index.css
 docs/
   PROJECT_DOCUMENTATION_TH.md
+src-tauri/
+  Cargo.toml
+  tauri.conf.json
+  icons/
+  src/
 ```
 
 ## 9. Data Model
@@ -288,6 +301,23 @@ docs/
 - ให้ UI คุยกับ repository abstraction
 - เปลี่ยนเป็น backend repository ได้ในอนาคตโดยไม่ต้องรื้อ UI
 
+### 10.7 Desktop Runtime Layer
+
+ไฟล์:
+
+- [tauri.conf.json](/e:/thai-typing-trainer/src-tauri/tauri.conf.json)
+- [Cargo.toml](/e:/thai-typing-trainer/src-tauri/Cargo.toml)
+- [main.rs](/e:/thai-typing-trainer/src-tauri/src/main.rs)
+- [lib.rs](/e:/thai-typing-trainer/src-tauri/src/lib.rs)
+
+หน้าที่
+
+- ครอบ frontend React/Vite ให้เป็น native desktop window
+- กำหนดขนาดหน้าต่างเริ่มต้นของ Windows app
+- กำหนด bundle metadata และ installer targets
+- รัน frontend dev server ผ่าน `beforeDevCommand`
+- ใช้ `../dist` เป็น frontend asset สำหรับ production bundle
+
 ## 11. Local Storage Schema
 
 ระบบใช้ key หลักดังนี้
@@ -362,13 +392,43 @@ npm run build
 - ESLint ผ่าน
 - TypeScript build ผ่าน
 - Vite production build ผ่าน
+- Tauri config ถูก scaffold และตรวจสอบด้วย `npx tauri info`
 
 หมายเหตุ
 
 - ยังไม่มี unit test automation
 - in-app browser verification ทำไม่ได้ใน session ก่อนหน้าเพราะ browser surface ไม่พร้อมใช้งาน
+- การ build `.exe` จริงยังต้องติดตั้ง Rust toolchain และ Visual Studio Build Tools เพิ่มบนเครื่อง
 
-## 15. แนวทางต่อยอด Backend
+## 15. ข้อกำหนดสำหรับ Windows Build
+
+หากต้องการ build โปรแกรม Windows จากเครื่องพัฒนา ต้องมีอย่างน้อย
+
+- `rustup`
+- `rustc`
+- `cargo`
+- Visual Studio Build Tools พร้อม MSVC และ Windows SDK
+- WebView2 Runtime
+
+คำสั่งหลัก
+
+```bash
+npm run tauri:dev
+npm run tauri:build
+```
+
+ผลลัพธ์ของ build จะถูกสร้างไว้ใน
+
+- `src-tauri/target/release/typeflow.exe`
+- `src-tauri/target/release/bundle/nsis/TypeFlow_0.1.0_x64-setup.exe`
+- `src-tauri/target/release/bundle/msi/TypeFlow_0.1.0_x64_en-US.msi`
+
+แนวทางการแจกจ่าย
+
+- ใช้ `NSIS .exe` เป็นตัวติดตั้งหลักสำหรับผู้ใช้ทั่วไป
+- ใช้ `MSI` เมื่อต้องการ deploy ผ่านเครื่องมือจัดการเครื่องในองค์กร
+
+## 16. แนวทางต่อยอด Backend
 
 สามารถขยายเป็น backend-driven architecture ได้โดยคง contract เดิมไว้
 
@@ -387,7 +447,7 @@ npm run build
 - `GET /api/dashboard`
 - `GET /api/personalized-lessons`
 
-## 16. Roadmap แนะนำ
+## 17. Roadmap แนะนำ
 
 ### ระยะสั้น
 
@@ -412,6 +472,6 @@ npm run build
 - mobile app
 - desktop app
 
-## 17. สรุป
+## 18. สรุป
 
 TypeFlow เวอร์ชันปัจจุบันเป็น MVP ที่พร้อมใช้งานจริงสำหรับฝึกพิมพ์ผ่านเว็บ โดยมีทั้ง typing engine, keyboard visualization, dashboard, persistence, และ sound feedback พร้อมโครงสร้างที่สามารถขยายต่อได้อย่างเป็นระบบ

@@ -1,13 +1,19 @@
 {
-  "name": "thai-typing-trainer",
+  "name": "typeflow",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Thai and English touch typing trainer built with React, Vite, and Tauri",
+  "author": "stoprider",
+  "homepage": "https://github.com/stoprider/thai-typing-trainer",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "react": "^19.2.6",
@@ -15,11 +21,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@tauri-apps/cli": "^2.11.2",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.4.21",
+    "esbuild": "^0.28.0",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",

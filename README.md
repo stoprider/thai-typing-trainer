@@ -21,6 +21,7 @@ TypeFlow คือเว็บแอปฝึกพิมพ์สัมผั�
 - TypeScript
 - Vite
 - TailwindCSS
+- Tauri 2
 - Web Audio API
 - ESLint
 
@@ -44,6 +45,18 @@ npm run dev
 npm run build
 ```
 
+### รันแบบ Windows Desktop ด้วย Tauri
+
+```bash
+npm run tauri:dev
+```
+
+### build ไฟล์ติดตั้ง Windows
+
+```bash
+npm run tauri:build
+```
+
 ### ตรวจคุณภาพโค้ด
 
 ```bash
@@ -59,6 +72,7 @@ src/
   hooks/        # reusable stateful logic
   services/     # storage, audio, repository abstraction
   types/        # shared contracts and models
+src-tauri/      # Tauri desktop runtime (Rust + bundling config)
 ```
 
 ## เอกสารประกอบ
@@ -76,6 +90,16 @@ MVP ที่พร้อมใช้งานแล้วในเวอร์�
 - Statistics dashboard
 - Local persistence
 - Sound feedback system
+- Windows desktop app ผ่าน Tauri
+
+## การแจกจ่ายบน Windows
+
+หลังจาก build ด้วย `npm run tauri:build` จะได้ไฟล์หลักอยู่ที่:
+
+- `src-tauri/target/release/bundle/nsis/TypeFlow_0.1.0_x64-setup.exe`
+- `src-tauri/target/release/bundle/msi/TypeFlow_0.1.0_x64_en-US.msi`
+
+ถ้าต้องการติดตั้งให้ผู้ใช้ทั่วไป แนะนำแจกไฟล์ `NSIS .exe` เป็นหลัก และเก็บ `MSI` ไว้สำหรับองค์กรหรือ deployment tools
 
 ## แผนพัฒนาต่อ
 
@@ -89,3 +113,4 @@ MVP ที่พร้อมใช้งานแล้วในเวอร์�
 
 - ระบบเสียงใช้ `Web Audio API` และ browser จะเริ่มเล่นเสียงหลังมี user interaction
 - ข้อมูลสถิติถูกเก็บไว้ใน browser ของผู้ใช้ผ่าน `localStorage`
+- การ build เป็น `.exe` ต้องมี Rust toolchain (`rustup`, `cargo`, `rustc`) ติดตั้งบนเครื่องก่อน
