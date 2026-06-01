@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { calculateSessionMetrics } from '../features/typing/typingEngine'
 import type { Lesson, TypingSession } from '../types'
+import { segmentText } from '../utils/textSegmentation'
 import { StatPill } from './StatPill'
 
 interface TypingPanelProps {
@@ -31,18 +32,21 @@ export function TypingPanel({
 
   const renderedContent = useMemo(
     () =>
-      lesson.content.split('').map((character, index) => {
+      segmentText(lesson.content).map((segment) => {
         let className = 'text-slate-400'
 
-        if (index < session.currentIndex) {
+        if (segment.end <= session.currentIndex) {
           className = 'text-emerald-600'
-        } else if (index === session.currentIndex) {
+        } else if (
+          session.currentIndex >= segment.start &&
+          session.currentIndex < segment.end
+        ) {
           className = 'rounded bg-amber-200 px-0.5 text-ink'
         }
 
         return (
-          <span key={`${character}-${index}`} className={className}>
-            {renderCharacter(character)}
+          <span key={`${segment.start}-${segment.value}`} className={className}>
+            {renderCharacter(segment.value)}
           </span>
         )
       }),
